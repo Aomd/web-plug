@@ -1,5 +1,4 @@
-
-import { AEvent } from "./AEvent";
+import { AEvent } from "../three/AEvent";
 import { indexedDB, IDBTransaction, IDBKeyRange } from "./compatible";
 
 class WebDB extends AEvent {
@@ -11,12 +10,12 @@ class WebDB extends AEvent {
       'getAll': [],
       'set': [],
       'del': [],
-      'update': [],
       'clear': [],
       'createObjectStore': [],
       'deleteObjectStore': [],
       'createIndex': [],
-      'upgradeneeded': []
+      'upgradeneeded': [],
+      'close':[]
     }
     if (!indexedDB) {
       throw new Error("indexedDB is not undefined")
@@ -127,13 +126,13 @@ class WebDB extends AEvent {
    * @returns
    * @memberof WebDB
    */
-  set(tableName, option) {
+  set(tableName, entity) {
     var _this = this;
     return new Promise(function (resolve, reject) {
-      var request = _this.getObjectStore(tableName, 'readwrite').add(option)
+      var request = _this.getObjectStore(tableName, 'readwrite').put(entity, entity?.key);
 
       request.onsuccess = function (e) {
-        resolve(_this._returnEntity('set', { tableName, option }))
+        resolve(_this._returnEntity('set', { tableName, entity }))
       }
 
       request.onerror = function (e) {
@@ -155,7 +154,7 @@ class WebDB extends AEvent {
     return new Promise(function (resolve, reject) {
       var request = _this.getObjectStore(tableName, 'readonly').index(option?.rowName).get(option?.value)
       request.onsuccess = function (e) {
-        resolve(_this._returnEntity('get', { entity: e.target.result, tableName, option }))
+        resolve(_this._returnEntity('get', { tableName, option }))
       }
       request.onerror = function (e) {
         reject(e)
@@ -207,41 +206,7 @@ class WebDB extends AEvent {
     // return this._returnEntity('del', { tableName, option })
   }
 
-  /**
-   * IDBObjectStore 更新
-   *
-   * @param {*} tableName IDBObjectStore 名称
-   * @param {Object} option 参数
-   * @param {*} fun 回调函数
-   * @returns
-   * @memberof WebDB
-   */
-  update(tableName, option, fun) {
-    var _this = this;
-    return new Promise(function (resolve, reject) {
-      var request = _this.getObjectStore(tableName, 'readwrite').openCursor()
-      request.onsuccess = function (e) {
-        var cursor = event.target.result;
-        if (cursor) {
-          var lastValue = JSON.parse(JSON.stringify(cursor.value))
-          if (cursor.value[option?.rowName] == option?.value) {
-            var updateData = fun(cursor.value)
-            let updateDataRequest = cursor.update(updateData)
-            updateDataRequest.onsuccess = (e) => {
-              // console.log('更新完成')
-              _this._returnEntity('update', { lastValue, updateData })
-            };
-          }
-          cursor.continue();
-        } else {
-          resolve('更新完成');
-        }
-      }
-      request.onerror = function (e) {
-        reject(e)
-      }
-    })
-  }
+
 
   /**
    * 清楚 指定名称 IDBObjectStore
@@ -267,7 +232,7 @@ class WebDB extends AEvent {
    */
   _returnEntity(eventName, value) {
     this._emit(eventName, value)
-    return value
+    return {eventName,...value}
   }
 
   /**
@@ -301,7 +266,7 @@ class WebDB extends AEvent {
     return new Promise(function (resolve, reject) {
       var request = _this.getObjectStore(tableName, 'readwrite').openCursor()
       request.onsuccess = function (e) {
-        var cursor = event.target.result;
+        var cursor = e.target.result;
         if (cursor) {
 
           if (list.length >= option?.limit) {
@@ -330,10 +295,11 @@ class WebDB extends AEvent {
    *
    * @memberof WebDB
    */
-  close(){
+  close() {
     this.db.close();
     this.connect = null;
     this.objectStore = null;
+    return this._returnEntity('close', {state:true})
   }
 }
 
