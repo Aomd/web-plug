@@ -1,10 +1,13 @@
+import { AEvent } from "./AEvent";
+
 /**
  * 从MP3 提取 专辑图片
  *
  * @class Mp3GetImg
  */
-class Mp3GetImg {
+class Mp3GetImg extends AEvent {
   constructor() {
+    super();
     this.uint8 = [];
     this._event = {
       'url': [],
@@ -17,23 +20,28 @@ class Mp3GetImg {
   async loadFile(file) {
     var arrayBuffer = await file.slice().arrayBuffer();
     this.uint8 = new Uint8Array(arrayBuffer)
-    console.log(this.uint8)
+    this.png = [];
+    this.jpg = [];
     return this;
   }
 
   async loadArrayBuffer(arrayBuffer) {
     this.uint8 = new Uint8Array(arrayBuffer)
+    this.png = [];
+    this.jpg = [];
     return this;
   }
 
   async loadBlob(blob) {
     var arrayBuffer = await blob.arrayBuffer();
     this.uint8 = new Uint8Array(arrayBuffer)
+    this.png = [];
+    this.jpg = [];
     return this;
   }
 
   run() {
-    
+
     var uint8 = this.uint8;
     for (var i = 0; i < uint8.length; i++) {
       // png
@@ -59,49 +67,40 @@ class Mp3GetImg {
   }
   _toBlock() {
     // error
-    if (this.png.length !== 0 && this.jpg.length !== 0) {
-      for (let fun of this._event['error']) {
-        fun(0,'data error');
-      }
-
+    if (this.png.length === 2 && this.jpg.length === 2) {
+      this._emit('error', { type: 0, error: 'data error' })
       return;
     }
     // png
-    if (this.png.length !== 0) {
+    if (this.png.length >= 2) {
       let entity = this.uint8.slice(...this.png)
-      this._toBlob(entity,'png');
+      this._toBlob(entity, 'png');
       return;
     }
     // jpg
-    if (this.jpg.length !== 0) {
+    if (this.jpg.length >= 2) {
       let entity = this.uint8.slice(...this.jpg)
-      this._toBlob(entity,'jpg')
+      this._toBlob(entity, 'jpg')
       return;
     }
 
     // error
-    for (let fun of this._event['error']) {
-      fun(1,'not find img');
-    }
-
+    this._emit('error', { type: 1, error: 'not find img' })
   }
-  _toBlob(entity,type) {
+  _toBlob(entity, type) {
     var buffer = new Uint8Array(entity).buffer;
     var blob = URL.createObjectURL(new Blob([buffer]))
 
     for (var fun of this._event['url']) {
-      fun(type,blob);
-      setTimeout(function(){
+      fun(type, blob);
+      setTimeout(function () {
         URL.revokeObjectURL(blob)
-      },0)
+      }, 0)
     }
     // console.log(this.href,this.end[this.index])
     // setTimeout(function(){
     //   URL.revokeObjectURL(_this.href)
     // },0)
-  }
-  on(eventName, fun) {
-    this._event[eventName].push(fun)
   }
 }
 
