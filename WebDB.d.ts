@@ -3,49 +3,49 @@ interface WebDBOption {
   varsion?: number
 }
 
-interface createObjectStoreOption {
+interface CreateObjectStoreOption {
   keyPath?: string,
   autoIncrement?: boolean
 }
 
-interface returnEntity {
+interface ReturnEntity {
   eventName: string
   value: object
 }
 
-interface setEntity extends Object {
+interface SetEntity extends Object {
   /**
    * IDBObjectStore.put 下标
    *
    * @type {(string|number)}
-   * @memberof setEntity
+   * @memberof SetEntity
    */
   key?: string | number
 }
 
-interface getOption {
+interface GetOption {
   rowName: string
   value?: string | number
 }
 
-interface getAllOption {
+interface GetAllOption {
   rowName: string
   value?: string | number
   limit?: number
 }
 
-interface delOption {
+interface DelOption {
 
   /**
    * 需要删除的指定 key
    *
    * @type {(number | string)}
-   * @memberof delOption
+   * @memberof DelOption
    */
   key: number | string
 }
 
-interface fuzzySearchOption {
+interface FuzzySearchOption {
   limit?: number
   rowName: string
   value: number | string
@@ -59,27 +59,27 @@ interface WebDB {
 
   init(): Promise<T>
 
-  createObjectStore(tableName: string, option?: createObjectStoreOption): Promise<returnEntity>
+  createObjectStore(tableName: string, option?: CreateObjectStoreOption): Promise<ReturnEntity>
 
-  deleteObjectStore(tableName: string): Promise<returnEntity>
+  deleteObjectStore(tableName: string): Promise<ReturnEntity>
 
   getObjectStore(tableName: string, type?: transactionMode): IDBObjectStore
 
   createIndex(indexName: String, option?: IDBIndexParameters): IDBIndex
 
-  set(tableName: string, entity?: setEntity): Promise<returnEntity>
+  set(tableName: string, entity?: SetEntity): Promise<ReturnEntity>
 
-  get(tableName: string, option: getOption): Promise<returnEntity>
+  get(tableName: string, option: GetOption): Promise<ReturnEntity>
 
-  getAll(tableName: string, option: getAllOption): Promise<returnEntity>
+  getAll(tableName: string, option: GetAllOption): Promise<ReturnEntity>
 
-  del(tableName: string, option: delOption): Promise<returnEntity>
+  del(tableName: string, option: DelOption): Promise<ReturnEntity>
 
-  clear(tableName: string): Promise<returnEntity>
+  clear(tableName: string): Promise<ReturnEntity>
 
-  fuzzySearch(tableName: string, option: fuzzySearchOption): Array<Object>
+  fuzzySearch(tableName: string, option: FuzzySearchOption): Array<Object>
 
-  close(): Promise<returnEntity>
+  close(): Promise<ReturnEntity>
 }
 
 declare var WebDB: WebDB;
