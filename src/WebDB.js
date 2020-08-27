@@ -1,5 +1,8 @@
 //@ts-check
+
 import { AEvent } from "./AEvent";
+
+
 
 class WebDB extends AEvent {
   constructor(option) {

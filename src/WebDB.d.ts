@@ -1,16 +1,16 @@
 interface WebDBOption {
-  name?: string,
-  varsion?: number
+  name?: string;
+  varsion?: number;
 }
 
 interface CreateObjectStoreOption {
-  keyPath?: string,
-  autoIncrement?: boolean
+  keyPath?: string;
+  autoIncrement?: boolean;
 }
 
 interface ReturnEntity {
-  eventName: string
-  value: object
+  eventName: string;
+  value: object;
 }
 
 interface SetEntity extends Object {
@@ -20,18 +20,18 @@ interface SetEntity extends Object {
    * @type {(string|number)}
    * @memberof SetEntity
    */
-  key?: string | number
+  key?: string | number;
 }
 
 interface GetOption {
-  rowName: string
-  value?: string | number
+  rowName: string;
+  value?: string | number;
 }
 
 interface GetAllOption {
-  rowName: string
-  value?: string | number
-  limit?: number
+  rowName: string;
+  value?: string | number;
+  limit?: number;
 }
 
 interface DelOption {
@@ -42,44 +42,44 @@ interface DelOption {
    * @type {(number | string)}
    * @memberof DelOption
    */
-  key: number | string
+  key: number | string;
 }
 
 interface FuzzySearchOption {
-  limit?: number
-  rowName: string
-  value: number | string
+  limit?: number;
+  rowName: string;
+  value: number | string;
 }
 
 
-type transactionMode = 'readonly' | 'readwrite' | 'readwriteflush'
+type transactionMode = 'readonly' | 'readwrite' | 'readwriteflush';
 
 interface WebDB {
-  new(option?: WebDBOption): this
+  new(option?: WebDBOption): this;
 
-  init(): Promise<T>
+  init(): Promise<T>;
 
-  createObjectStore(tableName: string, option?: CreateObjectStoreOption): Promise<ReturnEntity>
+  createObjectStore(tableName: string, option?: CreateObjectStoreOption): Promise<ReturnEntity>;
 
-  deleteObjectStore(tableName: string): Promise<ReturnEntity>
+  deleteObjectStore(tableName: string): Promise<ReturnEntity>;
 
-  getObjectStore(tableName: string, type?: transactionMode): IDBObjectStore
+  getObjectStore(tableName: string, type?: transactionMode): IDBObjectStore;
 
-  createIndex(indexName: String, option?: IDBIndexParameters): IDBIndex
+  createIndex(indexName: String, option?: IDBIndexParameters): IDBIndex;
 
-  set(tableName: string, entity?: SetEntity): Promise<ReturnEntity>
+  set(tableName: string, entity?: SetEntity): Promise<ReturnEntity>;
 
-  get(tableName: string, option: GetOption): Promise<ReturnEntity>
+  get(tableName: string, option: GetOption): Promise<ReturnEntity>;
 
-  getAll(tableName: string, option: GetAllOption): Promise<ReturnEntity>
+  getAll(tableName: string, option: GetAllOption): Promise<ReturnEntity>;
 
-  del(tableName: string, option: DelOption): Promise<ReturnEntity>
+  del(tableName: string, option: DelOption): Promise<ReturnEntity>;
 
-  clear(tableName: string): Promise<ReturnEntity>
+  clear(tableName: string): Promise<ReturnEntity>;
 
-  fuzzySearch(tableName: string, option: FuzzySearchOption): Array<Object>
+  fuzzySearch(tableName: string, option: FuzzySearchOption): Array<Object>;
 
-  close(): Promise<ReturnEntity>
+  close(): Promise<ReturnEntity>;
 }
 
 declare var WebDB: WebDB;
