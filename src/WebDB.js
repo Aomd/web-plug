@@ -1,5 +1,5 @@
-import { AEvent } from "../three/AEvent";
-import { indexedDB, IDBTransaction, IDBKeyRange } from "./compatible";
+//@ts-check
+import { AEvent } from "./AEvent";
 
 class WebDB extends AEvent {
   constructor(option) {
@@ -122,7 +122,7 @@ class WebDB extends AEvent {
    * IDBObjectStore 添加
    *
    * @param {*} tableName IDBObjectStore 名称
-   * @param {*} option 参数
+   * @param {*} entity 参数
    * @returns
    * @memberof WebDB
    */
