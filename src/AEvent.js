@@ -15,7 +15,7 @@ class AEvent {
   /**
    * 监听事件
    *
-   * @param {String} type eventName
+   * @param {String} eventName 
    * @param {Function} fun
    * @memberof AEvent
    */
@@ -30,7 +30,7 @@ class AEvent {
   /**
  * 解绑事件
  *
- * @param {String} type eventName
+ * @param {String} eventName 
  * @param {Function} fun
  * @memberof AEvent
  */

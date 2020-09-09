@@ -1,13 +1,15 @@
 import { isArray, isBlob } from "aomd-utils/src/Type";
+import { AEvent } from "./AEvent";
 
-class FileLoaderProgress {
+class FileLoaderProgress extends AEvent{
 
   constructor(array, base) {
-    if (isArray) {
+    super();
+    if (!isArray(array)) {
       throw 'array 不是数组';
     }
     // 记录on 事件
-    this.event = {
+    this._event = {
       'progress': [],
       'backBlob': [],
       'error': []
@@ -81,19 +83,14 @@ class FileLoaderProgress {
         if (type === 'success') {
 
           that.filesProgress[key] = 100;
-          for (var fun of that.event['backBlob']) {
-            fun(key, blob)
-          }
+          that._emit('backBlob',{key, blob})
           this.computeTotal();
           // 未读取模型
         } else if (type === 'error') {
           that.xhr(urlItem, (xhr) => {
             that.addDb(key, xhr.target.response)
+            that._emit('backBlob',{key, blob:xhr.target.response})
 
-            for (var fun of that.event['backBlob']) {
-              fun(key, xhr.target.response)
-              // -----------------------------
-            }
 
           })
         }
@@ -148,10 +145,7 @@ class FileLoaderProgress {
         cb(xhr)
       } else {
         // 模型加载错误
-        for (var fun of that.event['error']) {
-          fun(that.replaceFileName(xhr.target.responseURL) + '加载失败')
-          // -----------------------------
-        }
+        that._emit('error',{msg:that.replaceFileName(xhr.target.responseURL) + '加载失败'})
       }
     })
     xhr.send();
@@ -200,9 +194,7 @@ class FileLoaderProgress {
     }
 
     // 触发保存的回调函数
-    for (var fun of this.event['progress']) {
-      fun(total / this.num)
-    }
+    this._emit('progress',{progress:total / this.num})
   }
   // 计算 进度
   computeProgress(xhr) {
@@ -214,27 +206,10 @@ class FileLoaderProgress {
     this.computeTotal()
 
   }
-  on(type, cb) {
-    if (type === 'progress') {
-      // 添加回调函数
-      this.event['progress'].push(cb)
-    }
-    if (type === 'backBlob') {
-      // 添加回调函数
-      this.event['backBlob'].push(cb)
-    }
-    if (type === 'error') {
-      // 添加回调函数
-      this.event['error'].push(cb)
-    }
-
-
-  }
   close() {
     this.db.close();
     this.connect.close();
   }
-
 }
 
 export {

@@ -1,6 +1,7 @@
 //@ts-check
 
 import { AEvent } from "./AEvent";
+import { indexedDB } from "aomd-utils";
 
 
 
@@ -42,6 +43,7 @@ class WebDB extends AEvent {
 
     return new Promise(function (resolve, reject) {
       _this.connect.addEventListener('success', function (event) {
+        // @ts-ignore
         _this.db = event.target.result;
         resolve(event)
         console.log('success')

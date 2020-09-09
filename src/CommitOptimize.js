@@ -1,12 +1,20 @@
+import { AEvent } from "./AEvent";
+import { requestAnimationFrame } from "aomd-utils";
 
 /**
  *
- * @param {time} time 间隔时间
- * @param {num} num 多少条触发
+ *
  * @class CommitOptimize
  */
-class CommitOptimize {
+class CommitOptimize extends AEvent{
+  /**
+   *Creates an instance of CommitOptimize.
+   * @param {*} time 间隔时间
+   * @param {*} num 多少条触发
+   * @memberof CommitOptimize
+   */
   constructor(time, num) {
+    super();
     // 获取当前时间戳 为基准
     this.timeStamp = new Date().getTime();
 
@@ -19,7 +27,7 @@ class CommitOptimize {
     this.num = num || 300;
 
     // 收集触发事件
-    this.event = {
+    this._event = {
       'timeUp': [],
       'numUp': []
     }
@@ -41,22 +49,12 @@ class CommitOptimize {
     if (t - this.timeStamp >= this.time) {
       this.timeStamp = t
       // 触发时间事件
-      for (var fun of this.event['timeUp']) {
-        fun(this.data)
-      }
+      this._emit('timeUp',this.data);
       this.clearData()
     }
-    this.requestAnimationFrame()(this.timeComputer.bind(this))
+    requestAnimationFrame(this.timeComputer.bind(this))
   }
-  // 兼容
-  requestAnimationFrame() {
-    return window.requestAnimationFrame ||
-      window.webkitRequestAnimationFrame ||
-      window.mozRequestAnimationFrame ||
-      function (callback) {
-        window.setTimeout(callback, 1000 / 60);
-      };
-  }
+
 
   /**
    * 私有方法
@@ -71,25 +69,9 @@ class CommitOptimize {
 
     if (this.data.length >= this.num) {
       // 触发个数事件
-      for (var fun of this.event['numUp']) {
-        fun(this.data)
-      }
+      this._emit('numUp',this.data);
+      
       this.clearData()
-    }
-  }
-
-  /**
-   * 监听事件
-   *
-   * @param {String} type eventName
-   * @param {Function} fun
-   * @memberof CommitOptimize
-   */
-  on(type, fun) {
-    if (type === 'timeUp') {
-      this.event['timeUp'].push(fun)
-    } else if (type === 'numUp') {
-      this.event['numUp'].push(fun)
     }
   }
 
@@ -115,11 +97,11 @@ class CommitOptimize {
   }
 }
 
-var commitOptimize = new CommitOptimize();
+// var commitOptimize = new CommitOptimize();
 
-commitOptimize.on('timeUp', function (data) {
-  console.log('timeUp', data)
-})
-commitOptimize.on('numUp', function (data) {
-  console.log('numUp', data)
-})
+// commitOptimize.on('timeUp', function (data) {
+//   console.log('timeUp', data)
+// })
+// commitOptimize.on('numUp', function (data) {
+//   console.log('numUp', data)
+// })
