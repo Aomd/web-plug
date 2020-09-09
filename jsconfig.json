@@ -1,9 +1,10 @@
 {
     "compilerOptions": {
         "target": "es6",
-        "module": "esnext",
+        "module": "commonJS",
         "experimentalDecorators": true,
-        "allowSyntheticDefaultImports": true
+        "allowSyntheticDefaultImports": true,
+        "checkJs": true
     },
     "exclude": [
         "node_modules"
@@ -11,7 +12,5 @@
     "include": [
         "src/**/*",
     ],
-    "path": {
-        "@/*": ["./src/*"]
-    }
+    
 }

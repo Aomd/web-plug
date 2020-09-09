@@ -1,0 +1,36 @@
+{
+  "name": "web-plug",
+  "version": "0.0.1",
+  "description": "常用的web插件",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "files": [
+    "src",
+    "index.d.ts",
+    "index.js",
+    "package.json",
+    "README.md"
+  ],
+  "directories": {
+    "example": "example"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Aomd/web-plug.git"
+  },
+  "keywords": [
+    "plug"
+  ],
+  "author": "Aomd",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Aomd/web-plug/issues"
+  },
+  "homepage": "https://github.com/Aomd/web-plug#readme",
+  "dependencies": {
+    "aomd-utils": "0.0.4"
+  }
+}
