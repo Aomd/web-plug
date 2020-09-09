@@ -1,16 +1,16 @@
-import { isBlob } from "../util/Type";
+import { isArray, isBlob } from "aomd-utils/src/Type";
 
 class FileLoaderProgress {
 
   constructor(array, base) {
-    if (Object.prototype.toString.call(array).slice(8, -1) !== 'Array') {
+    if (isArray) {
       throw 'array 不是数组';
     }
     // 记录on 事件
     this.event = {
       'progress': [],
       'backBlob': [],
-      'error':[]
+      'error': []
     }
 
     // 收集资源
@@ -82,7 +82,7 @@ class FileLoaderProgress {
 
           that.filesProgress[key] = 100;
           for (var fun of that.event['backBlob']) {
-            fun(key,blob)
+            fun(key, blob)
           }
           this.computeTotal();
           // 未读取模型
@@ -91,7 +91,7 @@ class FileLoaderProgress {
             that.addDb(key, xhr.target.response)
 
             for (var fun of that.event['backBlob']) {
-              fun(key,xhr.target.response)
+              fun(key, xhr.target.response)
               // -----------------------------
             }
 
@@ -144,9 +144,9 @@ class FileLoaderProgress {
     })
     // 结束操作
     xhr.addEventListener('loadend', (xhr) => {
-      if(xhr.target.response.type != 'text/html' && isBlob(xhr.target.response)){
+      if (xhr.target.response.type != 'text/html' && isBlob(xhr.target.response)) {
         cb(xhr)
-      }else{
+      } else {
         // 模型加载错误
         for (var fun of that.event['error']) {
           fun(that.replaceFileName(xhr.target.responseURL) + '加载失败')
@@ -228,7 +228,7 @@ class FileLoaderProgress {
       this.event['error'].push(cb)
     }
 
-    
+
   }
   close() {
     this.db.close();

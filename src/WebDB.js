@@ -18,7 +18,7 @@ class WebDB extends AEvent {
       'deleteObjectStore': [],
       'createIndex': [],
       'upgradeneeded': [],
-      'close':[]
+      'close': []
     }
     if (!indexedDB) {
       throw new Error("indexedDB is not undefined")
@@ -235,7 +235,7 @@ class WebDB extends AEvent {
    */
   _returnEntity(eventName, value) {
     this._emit(eventName, value)
-    return {eventName,...value}
+    return { eventName, ...value }
   }
 
   /**
@@ -302,7 +302,7 @@ class WebDB extends AEvent {
     this.db.close();
     this.connect = null;
     this.objectStore = null;
-    return this._returnEntity('close', {state:true})
+    return this._returnEntity('close', { state: true })
   }
 }
 

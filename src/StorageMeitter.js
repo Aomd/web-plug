@@ -26,10 +26,10 @@ class StorageMeitter {
         const cmd = JSON.parse(e.newValue)
 
         // 循环收集到的事件
-        for(var fun of _this.event[cmd.event]){
-          fun(cmd.args,{url:e.url});
+        for (var fun of _this.event[cmd.event]) {
+          fun(cmd.args, { url: e.url });
         }
-        
+
       } catch (err) {
         console.error('unexpected value: ' + err.newValue)
       }

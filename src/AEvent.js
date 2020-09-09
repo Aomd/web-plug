@@ -27,13 +27,13 @@ class AEvent {
     // 添加
     this._event[eventName].push(fun)
   }
-    /**
-   * 解绑事件
-   *
-   * @param {String} type eventName
-   * @param {Function} fun
-   * @memberof AEvent
-   */
+  /**
+ * 解绑事件
+ *
+ * @param {String} type eventName
+ * @param {Function} fun
+ * @memberof AEvent
+ */
   off(eventName, fun) {
     // 不在直接return
     if (!(eventName in this._event)) {
