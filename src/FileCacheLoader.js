@@ -1,7 +1,7 @@
 import { isArray, isBlob } from "aomd-utils/src/Type";
 import { AEvent } from "./AEvent";
 
-class FileLoaderProgress extends AEvent{
+class FileCacheLoader extends AEvent{
 
   constructor(array, base) {
     super();
@@ -213,5 +213,5 @@ class FileLoaderProgress extends AEvent{
 }
 
 export {
-  FileLoaderProgress
+  FileCacheLoader
 }
