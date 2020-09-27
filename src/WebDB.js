@@ -159,7 +159,7 @@ class WebDB extends AEvent {
     return new Promise(function (resolve, reject) {
       var request = _this.getObjectStore(tableName, 'readonly').index(option?.rowName).get(option?.value)
       request.onsuccess = function (e) {
-        resolve(_this._returnEntity('get', { tableName, option }))
+        resolve(_this._returnEntity('get', { tableName, option, entity: e.target.result }))
       }
       request.onerror = function (e) {
         reject(e)
