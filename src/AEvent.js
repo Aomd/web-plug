@@ -12,6 +12,10 @@ class AEvent {
       }
     }
   }
+  
+  get events(){
+    return Object.keys(this._event)
+  }
   /**
    * 监听事件
    *
