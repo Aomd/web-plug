@@ -68,7 +68,7 @@ class PointSimplifierManager {
       ...option
     })
 
-    return
+    return pointSimplifierEntity
   }
   /**
    * 创建海量点
